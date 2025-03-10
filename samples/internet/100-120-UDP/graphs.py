@@ -23,18 +23,18 @@ def main():
     print(df.describe())
     print()
 
-    fig = plt.figure(figsize=(9, 5))
+    fig = plt.figure(figsize=(8, 4))
 
     ax = fig.gca()
 
-    ax.set_xlim(13, 15)
-    ax.set_xlabel('Latência (ms) - escala logarítmica')
+    ax.set_ylim(13, 15)
+    ax.set_ylabel('Latência (ms) - escala logarítmica')
 
     ax = sns.boxplot(
         data=df,
         hue='Tamanho',
         log_scale=True,
-        x=stat
+        y=stat
     )
 
     hatches = ['//', '..', 'xx']
@@ -62,14 +62,14 @@ def main():
     plt.savefig('rtt-hist-udp-size.png', dpi=300)
     plt.show()
 
-    for i, vpn in enumerate(df['VPN'].unique()):
-        for j, size in enumerate(sorted(df['Tamanho'].unique(), reverse=True)):
-            ut = df[df['VPN'] == vpn]
-            ut = ut[ut['Tamanho'] == size]
+    #for i, vpn in enumerate(df['VPN'].unique()):
+    for j, size in enumerate(sorted(df['Tamanho'].unique(), reverse=True)):
+        #ut = df[df['VPN'] == vpn]
+        ut = df[df['Tamanho'] == size]
 
-            print(f'VPN {vpn} - Size {size}')
-            print(ut.describe())
-            print()
+        print(f'VPN - Size {size}')
+        print(ut.describe())
+        print()
 
 
 if __name__ == '__main__':

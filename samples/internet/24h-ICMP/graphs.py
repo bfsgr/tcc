@@ -19,38 +19,32 @@ def main():
 
     # rename columns
     df = df.rename(columns={'vpn': 'VPN', 'size': 'Tamanho'})
+    df = df[['hour', stat, 'Tamanho', 'VPN']]
 
     print(f"Informações gerais")
     print(df.describe())
     print()
 
-    fig = plt.figure(figsize=(12, 10))
+    g = sns.relplot(
+        data=df,
+        x="hour",
+        y="rtt",
+        col="Tamanho",
+        hue="VPN",
+        style="VPN",
+        markers=['o', '^', 's', 'P'],
+        kind="line",
+        dashes=False,
+        errorbar=None,
+        height=3,
+        col_order=sorted(df['Tamanho'].unique(), reverse=True),
+    )
 
-    for i, size in enumerate(sorted(df['Tamanho'].unique(), reverse=True)):
-        ax = plt.subplot(3, 1, i+1)
+    g.set_axis_labels("Hora", "Latência (ms)")
+    g.set_titles("Tamanho do pacote: {col_name} bytes")
 
-        ut = df[df['Tamanho'] == size]
-        ut = ut.groupby(['VPN', 'hour'], observed=True).agg({
-            stat: 'mean',
-            'Tamanho': 'first',
-            'VPN': 'first',
-        })
-
-        sns.pointplot(x='hour',
-                      y=stat,
-                      data=ut,
-                      hue='VPN',
-                      markers=['o', '^', 's', 'P'],
-                      ax=ax,
-                      )
-
-        ax.set_title(
-            f'Latência média por hora - tamanho do pacote: {size} bytes')
-        ax.set_xlabel('Hora')
-        ax.set_ylabel('Latência (ms)')
-
-    plt.tight_layout()
-    plt.savefig('rtt-hora-internet.png', dpi=300)
+    g.tight_layout()
+    g.savefig('rtt-hora-internet.png', dpi=300)
     plt.show()
 
     fig = plt.figure(figsize=(7, 4))
