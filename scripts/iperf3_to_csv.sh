@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Author: Michael Baddeley
-# Date:   01/02/23
-#
-# Modified by: Bruno Fusieger
-# Date: 05/11/24
-#
-#
 #Usage:  iperf3 -c localhost -t 5 | bash iperf3_to_csv.sh output_200_20_random.csv
 
 echo "timestamp,interval,transfer,bitrate,retr,cwnd" >> $1
